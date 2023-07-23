@@ -15,11 +15,12 @@ def convert_markdown_to_html(md_file, output_file):
     content = content.replace('**', '<b>', 1).replace('**', '</b>', 1)
     content = content.replace('__', '<em>', 1).replace('__', '</em>', 1)
 
-    # Parse MD5 syntax and replace with MD5 hash (lowercase)
-    md5_parts = content.split('[[', 1)[1].split(']]', 1)
-    md5_content = md5_parts[0]
-    md5_hash = hashlib.md5(md5_content.encode()).hexdigest()
-    content = content.replace(f"[[{md5_content}]]", md5_hash)
+    # Parse MD5 syntax and replace with MD5 hash (lowercase) if it exists
+    if '[[' in content and ']]' in content:
+        md5_parts = content.split('[[', 1)[1].split(']]', 1)
+        md5_content = md5_parts[0]
+        md5_hash = hashlib.md5(md5_content.encode()).hexdigest()
+        content = content.replace("[[" + md5_content + "]]", md5_hash)
 
     # Parse content removal syntax and remove characters (case insensitive)
     content_parts = content.split('((')
@@ -32,7 +33,7 @@ def convert_markdown_to_html(md_file, output_file):
 
     # Parse paragraphs and replace with HTML tags
     paragraphs = content.split("\n\n")
-    content = "\n".join([f"<p>\n    {p.replace('\n', '<br />\n    ')}\n</p>" for p in paragraphs])
+    content = "\n".join(["<p>\n    " + p.replace('\n', '<br />\n    ') + "\n</p>" for p in paragraphs])
 
     # Parse ordered listing and replace with HTML tags
     content = content.replace("\n* ", "\n<li>")

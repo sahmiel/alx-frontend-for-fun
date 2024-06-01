@@ -1,0 +1,27 @@
+h2 {
+  display: inline;
+  position: relative;
+}
+a {
+  display: inline-block;
+  text-decoration: none;
+  color: #cc1c3c;
+  z-index: 1;
+}
+a::before {
+  content: "";
+  visibility: hidden;
+  height: 3px;
+  width: 64%;
+  background-color: #cc1c3c;
+  left: 3.8rem;
+  bottom: 0;
+  position: absolute;
+  transform-origin: left;
+  transform: scaleX(0);
+  transition: .5s ease-out;
+}
+a:hover::before {
+  visibility: visible;
+  transform: scaleX(1);
+}
